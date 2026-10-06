@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Solar System Explorer</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <nav>
+    <button id="btn-explore">Explore</button>
+    <button id="btn-calc">Calculator</button>
+    <button id="btn-missions">Missions</button>
+    <button id="btn-quiz">Quiz</button>
+  </nav>
+
+  <canvas id="space"></canvas>
+  <aside id="info-panel">Click a planet to learn more.</aside>
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+      }
+    }
+  </script>
+
+  <script src="js/data.js"></script>
+  <script src="js/calculator.js"></script>
+  <script src="js/missions.js"></script>
+  <script src="js/quiz.js"></script>
+  <script type="module" src="js/main.js"></script>
+  
+</body>
+</html>
