@@ -1,5 +1,7 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+import { DRACOLoader } from "three/addons/loaders/DRACOLoader.js";
 
 const SUN_RADIUS = 7;
 
@@ -34,6 +36,10 @@ const TEXTURE_FILES = {
   SaturnRing: "textures/2k_saturn_ring_alpha.png"
 };
 
+const SPACECRAFT_FILE = "models/iss.glb";
+const SPACECRAFT_LENGTH = 0.9;  // longest side of the model, in scene units
+const SPACECRAFT_ORBIT = 2.4;   // distance from Earth's center
+
 export function startSolarSystem3D(canvas, onSelect, onDeselect) {
   // ---- Scene, camera, renderer ----
   const scene = new THREE.Scene();
@@ -43,13 +49,39 @@ export function startSolarSystem3D(canvas, onSelect, onDeselect) {
   const renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
+    // ---- Safe mouse-wheel zoom: one fixed step per scroll, never jumps ----
+  let lastWheel = 0;
+  canvas.addEventListener("wheel", function (e) {
+    e.preventDefault();
+    e.stopImmediatePropagation(); // blocks OrbitControls' own wheel zoom
+    const now = performance.now();
+    if (now - lastWheel < 40) return; // ignore a burst of events
+    lastWheel = now;
+
+    const minDist = selected ? 4 : 14; // stay outside the Sun unless a planet is selected
+    const maxDist = 250;
+    const offset = camera.position.clone().sub(controls.target);
+    const factor = e.deltaY > 0 ? 1.1 : 1 / 1.1;
+    const dist = THREE.MathUtils.clamp(offset.length() * factor, minDist, maxDist);
+    camera.position.copy(controls.target).add(offset.setLength(dist));
+  }, { passive: false });
+
   const controls = new OrbitControls(camera, canvas);
   controls.enableDamping = true;
-  controls.minDistance = 10;
-  controls.maxDistance = 400;
-
+  controls.dampingFactor = 0.08;
+  controls.zoomSpeed = 0.5;   // gentler zoom per scroll
+  controls.minDistance = 14;
+  controls.maxDistance = 250;
   // ---- Texture loading (falls back to plain color if a file is missing) ----
-  const loader = new THREE.TextureLoader();
+    const manager = new THREE.LoadingManager();
+  manager.onLoad = function () {
+    document.getElementById("loading").classList.add("hidden");
+  };
+  // Safety net: never leave the loading screen up forever
+  setTimeout(function () {
+    document.getElementById("loading").classList.add("hidden");
+  }, 10000);
+  const loader = new THREE.TextureLoader(manager);
   function applyTexture(material, path) {
     loader.load(
       path,
@@ -60,7 +92,40 @@ export function startSolarSystem3D(canvas, onSelect, onDeselect) {
         material.needsUpdate = true;
       },
       undefined,
-      function () { console.warn("Texture not found, using plain color:", path); }
+      function () { console.warn("Texture NOT found:", path); }
+    );
+  }
+
+  // ---- Spacecraft (.glb model) ----
+  const gltfLoader = new GLTFLoader(manager);
+  const dracoLoader = new DRACOLoader();
+  dracoLoader.setDecoderPath("https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/libs/draco/gltf/");
+  gltfLoader.setDRACOLoader(dracoLoader);
+  let spacecraft = null;
+
+  function loadSpacecraft(parent) {
+    gltfLoader.load(
+      SPACECRAFT_FILE,
+      function (gltf) {
+        const model = gltf.scene;
+
+        // Shrink the model to a standard size and center it on its own origin
+        const box = new THREE.Box3().setFromObject(model);
+        const size = box.getSize(new THREE.Vector3());
+        const center = box.getCenter(new THREE.Vector3());
+        const scale = SPACECRAFT_LENGTH / Math.max(size.x, size.y, size.z);
+        model.scale.setScalar(scale);
+        model.position.copy(center).multiplyScalar(-scale);
+
+        // The pivot is what moves along the orbit
+        const pivot = new THREE.Group();
+        pivot.add(model);
+        parent.add(pivot);
+        spacecraft = { pivot: pivot, angle: 0 };
+        console.log("Spacecraft model loaded:", SPACECRAFT_FILE);
+      },
+      undefined,
+      function (error) { console.warn("Model NOT found:", SPACECRAFT_FILE, error); }
     );
   }
 
@@ -158,6 +223,11 @@ export function startSolarSystem3D(canvas, onSelect, onDeselect) {
       applyTexture(ringMaterial, TEXTURE_FILES.SaturnRing);
     }
 
+    // The space station orbits Earth
+    if (p.name === "Earth") {
+      loadSpacecraft(p.group);
+    }
+
     const label = makeLabel(p.name);
     label.position.y = p.size + 2;
     p.group.add(label);
@@ -229,16 +299,26 @@ export function startSolarSystem3D(canvas, onSelect, onDeselect) {
         0,
         -Math.sin(p.angle) * p.orbitRadius
       );
-      // Same spin for all; the axial tilt makes Venus and Uranus look "backwards"/sideways
       p.mesh.rotation.y += dt * 0.5;
     });
+
+    // The space station circles Earth on a slightly tilted path
+    if (spacecraft) {
+      spacecraft.angle += dt * 1.2;
+      const a = spacecraft.angle;
+      spacecraft.pivot.position.set(
+        Math.cos(a) * SPACECRAFT_ORBIT,
+        Math.sin(a) * SPACECRAFT_ORBIT * 0.4,
+        -Math.sin(a) * SPACECRAFT_ORBIT * 0.9
+      );
+    }
 
     // Smoothly move the view toward the selected planet (or back to the Sun)
     const focus = selected ? selected.group.position : sunPosition;
     const before = controls.target.clone();
     controls.target.lerp(focus, 0.08);
     camera.position.add(controls.target.clone().sub(before));
-
+    controls.minDistance = selected ? 4 : 14;
     controls.update();
     renderer.render(scene, camera);
     requestAnimationFrame(animate);

@@ -3,7 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="An interactive 3D solar system game: explore planets, use the physics calculator, complete missions, and take a quiz.">
   <title>Solar System Explorer</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🪐</text></svg>">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -12,10 +14,17 @@
     <button id="btn-calc">Calculator</button>
     <button id="btn-missions">Missions</button>
     <button id="btn-quiz">Quiz</button>
+    <button id="btn-sound">🔊 Sound</button>
   </nav>
 
   <canvas id="space"></canvas>
   <aside id="info-panel">Click a planet to learn more.</aside>
+
+  <div id="loading">
+    <div class="spinner"></div>
+    <p>Loading the solar system…</p>
+  </div>
+
   <script type="importmap">
     {
       "imports": {
@@ -26,10 +35,10 @@
   </script>
 
   <script src="js/data.js"></script>
+  <script src="js/sound.js"></script>
   <script src="js/calculator.js"></script>
   <script src="js/missions.js"></script>
   <script src="js/quiz.js"></script>
   <script type="module" src="js/main.js"></script>
-  
 </body>
 </html>
