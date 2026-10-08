@@ -1,25 +1,26 @@
-const CALC_G = 6.674e-11;   // gravitational constant
-const EARTH_G = 9.81;       // Earth's surface gravity (m/s²)
+const CALC_G = 6.674e-11;
+const EARTH_G = 9.81;
 
-// Weight (a force, in newtons) = mass × gravity
-function calcWeightN(massKg, gravity) {
+function calcWeightN(massKg, gravity)
+{
   return massKg * gravity;
 }
-
-// Kepler's third law: T² = a³  (T in Earth years, a in AU)
-function calcOrbitalPeriodYears(distanceAU) {
+function calcOrbitalPeriodYears(distanceAU)
+{
   return Math.pow(distanceAU, 1.5);
 }
 
-// Escape velocity: v = √(2GM / r), returned in km/s
-function calcEscapeVelocityKmS(massE24, diameterKm) {
+function calcEscapeVelocityKmS(massE24, diameterKm)
+{
   const mass = massE24 * 1e24;
   const radius = (diameterKm / 2) * 1000;
   return Math.sqrt((2 * CALC_G * mass) / radius) / 1000;
 }
 
-function initCalculator(panel) {
-  const options = planets.map(function (p) {
+function initCalculator(panel)
+{
+  const options = planets.map(function (p)
+  {
     return '<option value="' + p.name + '">' + p.name + "</option>";
   }).join("");
 
@@ -37,38 +38,34 @@ function initCalculator(panel) {
   document.getElementById("calc-planet").addEventListener("change", updateCalculator);
   updateCalculator();
 }
-
-// Lets the 3D view change the dropdown when you click a planet
-function setCalculatorPlanet(name) {
+function setCalculatorPlanet(name)
+{
   const select = document.getElementById("calc-planet");
-  if (select) {
+  if (select)
+  {
     select.value = name;
     updateCalculator();
   }
 }
-
-function updateCalculator() {
+function updateCalculator()
+{
   const out = document.getElementById("calc-output");
   const mass = parseFloat(document.getElementById("calc-mass").value);
-
-  // Validate the input before calculating
-  if (isNaN(mass) || mass <= 0 || mass > 500) {
+  if (isNaN(mass) || mass <= 0 || mass > 500)
+  {
     out.innerHTML = '<p class="calc-error">Enter a mass between 1 and 500 kg.</p>';
     return;
   }
-
   const name = document.getElementById("calc-planet").value;
   const p = planets.find(function (planet) { return planet.name === name; });
-
   const weightN = calcWeightN(mass, p.gravity);
   const feelsLikeKg = weightN / EARTH_G;
   const periodYears = calcOrbitalPeriodYears(p.distanceAU);
   const escapeKmS = calcEscapeVelocityKmS(p.massE24, p.diameterKm);
-  const jumpM = 0.5 * EARTH_G / p.gravity; // same take-off speed as a 0.5 m jump on Earth
-
-  // Bar chart: weight on every planet
+  const jumpM = 0.5 * EARTH_G / p.gravity;
   const maxWeight = Math.max.apply(null, planets.map(function (q) { return calcWeightN(mass, q.gravity); }));
-  const bars = planets.map(function (q) {
+  const bars = planets.map(function (q)
+  {
     const w = calcWeightN(mass, q.gravity);
     return `
       <div class="bar-row">

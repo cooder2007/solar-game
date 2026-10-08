@@ -1,6 +1,7 @@
 * { box-sizing: border-box; }
 
-body {
+body
+{
   margin: 0;
   min-height: 100vh;
   font-family: "Segoe UI", Arial, sans-serif;
@@ -8,8 +9,8 @@ body {
   background: radial-gradient(circle at 50% 40%, #121a3a 0%, #05070f 70%);
   overflow: hidden;
 }
-
-nav {
+nav
+{
   position: fixed;
   top: 0; left: 0; right: 0;
   display: flex;
@@ -18,8 +19,8 @@ nav {
   background: rgba(5, 7, 15, 0.85);
   z-index: 10;
 }
-
-nav button {
+nav button
+{
   padding: 8px 16px;
   border: 1px solid #3b82f6;
   border-radius: 6px;
@@ -27,15 +28,20 @@ nav button {
   color: #e8ecf5;
   cursor: pointer;
 }
-nav button:hover { background: #3b82f6; }
+nav button:hover
+{
+  background: #3b82f6;
+}
 
-#space {
+#space
+{
   display: block;
   width: 100vw;
   height: 100vh;
 }
 
-#info-panel {
+#info-panel
+{
   position: fixed;
   top: 60px; right: 16px;
   width: 280px;
@@ -47,17 +53,22 @@ nav button:hover { background: #3b82f6; }
   z-index: 10;
 }
 
-.planet-chip {
+.planet-chip
+{
   display: flex;
   align-items: center;
   gap: 8px;
   padding: 6px 0;
 }
-.planet-dot {
+
+.planet-dot
+{
   width: 14px; height: 14px;
   border-radius: 50%;
 }
-#calc-panel {
+
+#calc-panel
+{
   position: fixed;
   top: 60px; left: 16px;
   width: 320px;
@@ -68,15 +79,21 @@ nav button:hover { background: #3b82f6; }
   background: rgba(20, 28, 60, 0.9);
   z-index: 10;
 }
-#calc-panel[hidden] { display: none; }
 
-#calc-panel label {
+#calc-panel[hidden]
+{
+  display: none;
+}
+
+#calc-panel label
+{
   display: block;
   margin: 10px 0 4px;
   font-size: 14px;
 }
-#calc-panel input,
-#calc-panel select {
+
+#calc-panel input, #calc-panel select
+{
   width: 100%;
   padding: 8px;
   border-radius: 6px;
@@ -86,28 +103,51 @@ nav button:hover { background: #3b82f6; }
   font-size: 15px;
 }
 
-.calc-result {
+.calc-result
+{
   margin-top: 12px;
   padding: 10px;
   border-radius: 8px;
   background: rgba(255, 255, 255, 0.06);
   line-height: 1.7;
 }
-.calc-error { color: #f87171; }
-
-.bar-row {
+.calc-error
+{
+  color: #f87171;
+}
+.bar-row
+{
   display: flex;
   align-items: center;
   gap: 8px;
   margin: 5px 0;
   font-size: 13px;
 }
-.bar-name  { width: 62px; }
-.bar-track { flex: 1; height: 8px; border-radius: 4px; background: rgba(255, 255, 255, 0.1); }
-.bar-fill  { display: block; height: 100%; border-radius: 4px; }
-.bar-value { width: 64px; text-align: right; }
+.bar-name
+{
+  width: 62px;
+}
+.bar-track
+{
+  flex: 1;
+  height: 8px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.1);
+}
+.bar-fill 
+{
+  display: block;
+  height: 100%;
+  border-radius: 4px;
+}
+.bar-value
+{
+  width: 64px;
+  text-align: right;
+}
 
-#game-panel {
+#game-panel
+{
   position: fixed;
   top: 60px; left: 16px;
   width: 340px;
@@ -119,12 +159,24 @@ nav button:hover { background: #3b82f6; }
   line-height: 1.5;
   z-index: 10;
 }
-#game-panel[hidden] { display: none; }
-#game-panel h3, #game-panel h4 { margin: 0 0 8px; }
+#game-panel[hidden]
+{
+  display: none;
+}
+#game-panel h3, #game-panel h4
+{
+  margin: 0 0 8px;
+}
 
-.game-score { color: #fbbf24; font-weight: bold; margin: 0 0 8px; }
+.game-score
+{
+  color: #fbbf24;
+  font-weight: bold;
+  margin: 0 0 8px;
+}
 
-.game-btn {
+.game-btn
+{
   margin: 8px 8px 0 0;
   padding: 8px 14px;
   border: 1px solid #3b82f6;
@@ -133,10 +185,18 @@ nav button:hover { background: #3b82f6; }
   color: #fff;
   cursor: pointer;
 }
-.game-btn.secondary { background: transparent; color: #e8ecf5; }
-.game-btn:hover { filter: brightness(1.15); }
+.game-btn.secondary
+{
+  background: transparent;
+  color: #e8ecf5;
+}
+.game-btn:hover
+{
+  filter: brightness(1.15);
+}
 
-#mission-answer {
+#mission-answer
+{
   width: 100%;
   padding: 8px;
   border-radius: 6px;
@@ -146,10 +206,20 @@ nav button:hover { background: #3b82f6; }
   font-size: 15px;
 }
 
-.game-feedback { margin-top: 10px; min-height: 20px; }
-.game-feedback.good { padding: 10px; border-radius: 8px; background: rgba(34, 197, 94, 0.18); }
+.game-feedback
+{
+  margin-top: 10px;
+  min-height: 20px;
+}
+.game-feedback.good
+{
+  padding: 10px;
+  border-radius: 8px;
+  background: rgba(34, 197, 94, 0.18);
+}
 
-.quiz-option {
+.quiz-option
+{
   display: block;
   width: 100%;
   margin: 6px 0;
@@ -162,13 +232,30 @@ nav button:hover { background: #3b82f6; }
   font-size: 14px;
   cursor: pointer;
 }
-.quiz-option:hover:not(:disabled) { background: rgba(59, 130, 246, 0.25); }
-.quiz-option:disabled { cursor: default; color: #e8ecf5; }
-.quiz-option.correct { background: rgba(34, 197, 94, 0.3); border-color: #22c55e; }
-.quiz-option.wrong   { background: rgba(239, 68, 68, 0.3);  border-color: #ef4444; }
 
-/* ---- Sound button and loading screen ---- */
-#btn-sound { margin-left: auto; }
+.quiz-option:hover:not(:disabled)
+{
+  background: rgba(59, 130, 246, 0.25);
+}
+.quiz-option:disabled
+{
+  cursor: default;
+  color: #e8ecf5;
+}
+.quiz-option.correct
+{
+  background: rgba(34, 197, 94, 0.3);
+  border-color: #22c55e;
+}
+.quiz-option.wrong
+{
+  background: rgba(239, 68, 68, 0.3); 
+  border-color: #ef4444;
+}
+#btn-sound
+{
+  margin-left: auto;
+}
 
 #loading {
   position: fixed;
@@ -182,30 +269,50 @@ nav button:hover { background: #3b82f6; }
   z-index: 100;
   transition: opacity 0.6s;
 }
-#loading.hidden { opacity: 0; pointer-events: none; }
 
-.spinner {
+#loading.hidden
+{
+  opacity: 0;
+  pointer-events: none;
+}
+.spinner
+{
   width: 42px; height: 42px;
   border: 4px solid rgba(255, 255, 255, 0.15);
   border-top-color: #3b82f6;
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
-@keyframes spin { to { transform: rotate(360deg); } }
 
-/* ---- Phone and small-screen layout ---- */
-@media (max-width: 700px) {
-  nav { overflow-x: auto; padding: 8px; }
-  nav button { padding: 6px 10px; font-size: 13px; white-space: nowrap; }
-
-  #info-panel {
+@keyframes spin
+{
+  to
+  {
+    transform: rotate(360deg);
+  }
+}
+@media (max-width: 700px)
+{
+  nav
+  {
+    overflow-x: auto;
+    padding: 8px;
+  }
+  nav button
+  {
+    padding: 6px 10px;
+    font-size: 13px;
+    white-space: nowrap;
+  }
+  #info-panel
+  {
     top: 52px; left: 8px; right: 8px;
     width: auto;
     max-height: 22vh;
     font-size: 14px;
   }
-
-  #calc-panel, #game-panel {
+  #calc-panel, #game-panel
+  {
     top: auto; bottom: 0; left: 0;
     width: 100%;
     max-height: 50vh;

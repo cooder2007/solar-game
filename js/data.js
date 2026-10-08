@@ -16,8 +16,7 @@ const planets = [
   { name: "Neptune", color: "#4f6bed", diameterKm: 49528,  gravity: 11.15, distanceAU: 30.07, massE24: 102,   orbitDays: 60190,  dayLength: "16.1 hours",      moons: 16,
     fact: "Neptune has the fastest winds in the solar system." }
 ];
-// ---- Missions ----
-// type "pick": the player clicks a planet. type "calc": the player types a number.
+
 const missions = [
   {
     type: "pick", title: "Strongest Pull",
@@ -62,9 +61,6 @@ const missions = [
     explain: "Escape velocity is √(2GM/r), about 11.2 km/s for Earth."
   }
 ];
-
-// ---- Quiz ----
-// answer = index of the correct option (starting from 0)
 const quizQuestions = [
   {
     question: "Which planet has the shortest day?",
